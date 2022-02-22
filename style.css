@@ -72,3 +72,21 @@ a:hover {
   margin-right: 24px;
   border-radius: 12px;
 }
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: calc(50% - 16px);
+  transform: translate(-50%, -100vh) rotate(720deg);
+  background-color: #000;
+  max-width: 768px;
+  width: calc(100% - 32px);
+  margin: 0 16px;
+  padding: 24px;
+  border-radius: 24px;
+  transition: transform 500ms ease-out;
+}
+
+.modal.modal--active {
+  transform: translate(-50%, -50%);
+}

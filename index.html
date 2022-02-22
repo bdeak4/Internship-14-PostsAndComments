@@ -12,7 +12,11 @@
       <nav class="actions">
         <div>PostsAndComments</div>
         <div class="actions-public">
-          <a href="#">Početna</a>
+          <a
+            href="#"
+            onclick="event.preventDefault(); document.querySelector('.modal').classList.toggle('modal--active')"
+            >Početna</a
+          >
           <a href="#">Prijava</a>
           <a href="#">Registracija</a>
         </div>
@@ -25,6 +29,14 @@
       <div class="posts">
         <div class="loading">Loading<span class="dots"></span></div>
       </div>
+    </div>
+    <div class="modal">
+      test<br />test<br />test<br />test<br />test<br />test<br />test<br />test<br />
+      <button
+        onclick="document.querySelector('.modal').classList.toggle('modal--active')"
+      >
+        zatvori me
+      </button>
     </div>
     <script src="src/index.js"></script>
   </body>
