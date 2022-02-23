@@ -37,6 +37,31 @@ a:hover {
   display: none;
 }
 
+.button {
+  padding: 8px 16px;
+  border: none;
+  background-color: #000;
+  color: #fff;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 200ms ease-out;
+}
+
+.button--like {
+  display: flex;
+  flex-direction: column;
+}
+
+.button--like:hover {
+  background-color: orangered;
+}
+
+.like-count {
+  font-size: 24px;
+  font-weight: 600;
+}
+
 .actions {
   display: flex;
   justify-content: space-between;
@@ -68,9 +93,33 @@ a:hover {
 }
 
 .post__image {
+  width: 200px;
+  height: 200px;
   object-fit: cover;
   margin-right: 24px;
   border-radius: 12px;
+}
+
+.post__title {
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+
+.post__metadata {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.post__metadata__separator {
+  margin: 0 8px;
+}
+
+.post__owner-image {
+  width: 24px;
+  height: 24px;
+  border-radius: 100%;
+  margin-right: 8px;
 }
 
 .modal {

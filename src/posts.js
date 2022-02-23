@@ -22,13 +22,29 @@ async function getPosts(page) {
       attributes += ` data-action="load-more" data-next-page="${page + 1}"`;
     }
 
+    const date = new Date(post.publishDate);
+
     document.querySelector(".posts").innerHTML += `
     <div class="post" ${attributes}>
       <div class="post__header">
-        <img src="${post.image}" alt="" width="200" height="200" class="post__image">
+        <img src="${post.image}" alt="" class="post__image">
         <div class="post__header__text">
           <h2 class="post__title">${post.text}</h2>
-          <p>${post.likes} ${post.owner.firstName} ${post.owner.lastName}</p>
+          <div class="post__metadata">
+            ${date.toLocaleString()}
+            <div class="post__metadata__separator">~</div>
+            <img src="${post.owner.picture}" alt="" class="post__owner-image">
+            <div class="post__owner">
+              ${post.owner.firstName} ${post.owner.lastName}
+            </div>
+          </div>
+          <div>
+            <button type="button" class="button button--like" 
+              data-action="like-post" data-post-id="${post.id}">
+              <span class="like-count">${post.likes}</span>
+              &uarr;Like
+            </button>
+          </div>
         </div>
       <div>
     </div>

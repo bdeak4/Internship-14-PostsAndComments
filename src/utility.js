@@ -9,6 +9,7 @@ function isElementVisible(selector) {
     document.documentElement.clientHeight,
     window.innerHeight
   );
+
   return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
 }
 
