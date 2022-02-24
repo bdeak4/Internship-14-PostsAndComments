@@ -67,6 +67,7 @@ a:hover {
   display: flex;
   flex-direction: column;
   padding: 16px;
+  transition: transform 200ms ease-out, background-color 200ms ease-out;
 }
 
 .button--expand .line:not(:last-child) {
@@ -82,7 +83,7 @@ a:hover {
   height: 2px;
   width: 12px;
   background-color: #fff;
-  transition: transform 200ms ease-out, background-color 200ms ease-out;
+  transition: transform 200ms ease-out;
 }
 
 .button--expand .line__left {
@@ -95,6 +96,7 @@ a:hover {
 
 .button--expanded {
   background-color: orangered;
+  transform: rotate(180deg);
 }
 
 .button--expanded .line:nth-child(2) .line__left {
