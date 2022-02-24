@@ -51,6 +51,7 @@ a:hover {
 .button--like {
   display: flex;
   flex-direction: column;
+  margin: 12px 0;
 }
 
 .button--like:hover {
@@ -62,6 +63,48 @@ a:hover {
   font-weight: 600;
 }
 
+.button--expand {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+}
+
+.button--expand .line:not(:last-child) {
+  margin-bottom: 8px;
+}
+
+.button--expand .line {
+  display: flex;
+}
+
+.button--expand .line__left,
+.button--expand .line__right {
+  height: 2px;
+  width: 12px;
+  background-color: #fff;
+  transition: transform 200ms ease-out, background-color 200ms ease-out;
+}
+
+.button--expand .line__left {
+  transform: translateX(2px) rotate(45deg);
+}
+
+.button--expand .line__right {
+  transform: translateX(-2px) rotate(-45deg);
+}
+
+.button--expanded {
+  background-color: orangered;
+}
+
+.button--expanded .line:nth-child(2) .line__left {
+  transform: translate(2px, -2px) rotate(-45deg);
+}
+
+.button--expanded .line:nth-child(2) .line__right {
+  transform: translate(-2px, -2px) rotate(45deg);
+}
+
 .actions {
   display: flex;
   justify-content: space-between;
@@ -69,6 +112,7 @@ a:hover {
   position: sticky;
   top: 0;
   background-color: #000;
+  z-index: 2;
 }
 
 .actions a:not(:last-child) {
@@ -105,21 +149,29 @@ a:hover {
   margin-bottom: 12px;
 }
 
-.post__metadata {
+.metadata {
   display: flex;
   align-items: center;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 
-.post__metadata__separator {
+.metadata__separator {
   margin: 0 8px;
 }
 
-.post__owner-image {
+.owner-image {
   width: 24px;
   height: 24px;
   border-radius: 100%;
   margin-right: 8px;
+}
+
+.post__comments {
+  margin-top: 24px;
+}
+
+.post__comment:not(:last-child) {
+  margin-bottom: 24px;
 }
 
 .modal {

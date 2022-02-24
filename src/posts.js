@@ -1,28 +1,21 @@
-import { apiAppId } from "./index.js";
+import { collapseComments, getComments } from "./comments.js";
 import { startLoading, stopLoading } from "./loading.js";
-import { isElementVisible } from "./utility.js";
+import {
+  getApiResponse,
+  isElementVisible,
+  printObjectMetadata,
+} from "./utility.js";
 
 async function getPosts(page) {
   startLoading(".loading--posts");
 
-  const response = await fetch(
-    `https://dummyapi.io/data/v1/post?page=${page}`,
-    {
-      headers: {
-        "app-id": apiAppId,
-      },
-    }
-  );
-  const json = await response.json();
-  console.log(json);
+  const posts = await getApiResponse(`/post?page=${page}`);
 
-  json.data.forEach((post, i) => {
+  posts.data.forEach((post, i) => {
     let attributes = "";
-    if (i + 1 === json.data.length) {
+    if (i + 1 === posts.data.length) {
       attributes += ` data-action="load-more" data-next-page="${page + 1}"`;
     }
-
-    const date = new Date(post.publishDate);
 
     document.querySelector(".posts").innerHTML += `
     <div class="post" ${attributes}>
@@ -30,23 +23,32 @@ async function getPosts(page) {
         <img src="${post.image}" alt="" class="post__image">
         <div class="post__header__text">
           <h2 class="post__title">${post.text}</h2>
-          <div class="post__metadata">
-            ${date.toLocaleString()}
-            <div class="post__metadata__separator">~</div>
-            <img src="${post.owner.picture}" alt="" class="post__owner-image">
-            <div class="post__owner">
-              ${post.owner.firstName} ${post.owner.lastName}
-            </div>
-          </div>
+          ${printObjectMetadata(post)}
           <div>
             <button type="button" class="button button--like" 
               data-action="like-post" data-post-id="${post.id}">
               <span class="like-count">${post.likes}</span>
               &uarr;Like
             </button>
+            <button type="button" class="button button--expand"
+              data-action="show-comments" data-post-id="${post.id}">
+              <div class="line">
+                <div class="line__left"></div>
+                <div class="line__right"></div>
+              </div>
+              <div class="line">
+                <div class="line__left"></div>
+                <div class="line__right"></div>
+              </div>
+            </button>
           </div>
         </div>
-      <div>
+      </div>
+      <div class="post__comments hidden" data-post-id="${post.id}">
+      </div>
+      <div class="loading loading--comments hidden">
+        Loading<span class="dots"></span>
+      </div>
     </div>
     `;
   });
@@ -71,6 +73,23 @@ document.addEventListener("scroll", () => {
 
     getPosts(nextPage);
   }, 100);
+});
+
+document.querySelector(".posts").addEventListener("click", function (e) {
+  if (!e.target.dataset.action) {
+    e.target.parentElement.click();
+    return;
+  }
+
+  switch (e.target.dataset.action) {
+    case "show-comments":
+      getComments(e.target.dataset.postId);
+      break;
+
+    case "hide-comments":
+      collapseComments(e.target.dataset.postId);
+      break;
+  }
 });
 
 export { getPosts };
