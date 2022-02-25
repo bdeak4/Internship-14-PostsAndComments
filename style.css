@@ -52,65 +52,6 @@ a:hover {
   transition: background-color 200ms ease-out;
 }
 
-.button--like {
-  display: flex;
-  flex-direction: column;
-  margin: 12px 0;
-}
-
-.button--like:hover {
-  background-color: orangered;
-}
-
-.like-count {
-  font-size: 24px;
-  font-weight: 600;
-}
-
-.button--expand {
-  display: flex;
-  flex-direction: column;
-  padding: 16px;
-  transition: transform 200ms ease-out, background-color 200ms ease-out;
-}
-
-.button--expand .line:not(:last-child) {
-  margin-bottom: 8px;
-}
-
-.button--expand .line {
-  display: flex;
-}
-
-.button--expand .line__left,
-.button--expand .line__right {
-  height: 2px;
-  width: 12px;
-  background-color: #fff;
-  transition: transform 200ms ease-out;
-}
-
-.button--expand .line__left {
-  transform: translateX(2px) rotate(45deg);
-}
-
-.button--expand .line__right {
-  transform: translateX(-2px) rotate(-45deg);
-}
-
-.button--expanded {
-  background-color: orangered;
-  transform: rotate(180deg);
-}
-
-.button--expanded .line:nth-child(2) .line__left {
-  transform: translate(2px, -2px) rotate(-45deg);
-}
-
-.button--expanded .line:nth-child(2) .line__right {
-  transform: translate(-2px, -2px) rotate(45deg);
-}
-
 .actions {
   display: flex;
   justify-content: space-between;
@@ -175,6 +116,93 @@ a:hover {
   height: 24px;
   border-radius: 100%;
   margin-right: 8px;
+}
+
+.post__tags {
+  display: flex;
+  margin-top: 12px;
+  margin-bottom: 24px;
+}
+
+.post__tag {
+  padding: 6px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  user-select: none;
+  background-color: #000;
+  color: #fff;
+  border-radius: 24px;
+  transition: background-color 200ms ease-out;
+}
+
+.post__tag:hover,
+.post__tag--active {
+  background-color: orangered;
+}
+
+.post__tag:not(:last-child) {
+  margin-right: 8px;
+}
+
+.post__button-container {
+  display: flex;
+}
+
+.button--like {
+  margin-right: 16px;
+}
+
+.button--like:hover {
+  background-color: orangered;
+}
+
+.like-count {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.button--expand {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  transition: transform 200ms ease-out, background-color 200ms ease-out;
+}
+
+.button--expand .line:not(:last-child) {
+  margin-bottom: 8px;
+}
+
+.button--expand .line {
+  display: flex;
+}
+
+.button--expand .line__left,
+.button--expand .line__right {
+  height: 2px;
+  width: 12px;
+  background-color: #fff;
+  transition: transform 200ms ease-out;
+}
+
+.button--expand .line__left {
+  transform: translateX(2px) rotate(45deg);
+}
+
+.button--expand .line__right {
+  transform: translateX(-2px) rotate(-45deg);
+}
+
+.button--expanded {
+  background-color: orangered;
+  transform: rotate(180deg);
+}
+
+.button--expanded .line:nth-child(2) .line__left {
+  transform: translate(2px, -2px) rotate(-45deg);
+}
+
+.button--expanded .line:nth-child(2) .line__right {
+  transform: translate(-2px, -2px) rotate(45deg);
 }
 
 .post__comments {

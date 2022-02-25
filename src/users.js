@@ -32,7 +32,7 @@ function updateUserModal(user) {
 
   modal.querySelector(".user__name").innerHTML = user.firstName
     ? `${user.firstName} ${user.lastName}`
-    : "";
+    : "Loading...";
 
   modal.querySelector(".user__register-date").innerHTML = user.registerDate
     ? `Registracija: ${new Date(user.registerDate).toLocaleString()}`

@@ -10,6 +10,7 @@ async function getPosts(page) {
   startLoading(".loading--posts");
 
   const posts = await getApiResponse(`/post?page=${page}`);
+  console.log(posts);
 
   posts.data.forEach((post, i) => {
     let attributes = "";
@@ -31,8 +32,13 @@ function printPost(post, attributes) {
     <div class="post__header__text">
       <h2 class="post__title">${post.text}</h2>
       ${printObjectMetadata(post)}
-      <div>
-        <button type="button" class="button button--like" 
+      <div class="post__tags">
+        ${post.tags
+          .map((tag) => `<div class="post__tag">${tag}</div>`)
+          .join("")}
+      </div>
+      <div class="post__button-container">
+        <button type="button" class="button button--like"
           data-action="like-post" data-post-id="${post.id}">
           <span class="like-count">${post.likes}</span>
           &uarr;Like
