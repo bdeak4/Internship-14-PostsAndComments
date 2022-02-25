@@ -1,4 +1,4 @@
-import { apiAppId } from "./index.js";
+import { appId } from "./config.js";
 
 function isElementVisible(selector) {
   const element = document.querySelector(selector);
@@ -19,7 +19,7 @@ async function getApiResponse(path, method, headers) {
   const response = await fetch(`https://dummyapi.io/data/v1${path}`, {
     method: method || "GET",
     headers: {
-      "app-id": apiAppId,
+      "app-id": appId,
       ...headers,
     },
   });
@@ -33,10 +33,18 @@ function printObjectMetadata(object) {
   <div class="metadata">
     ${date.toLocaleString()}
     <div class="metadata__separator">~</div>
-    <img src="${object.owner.picture}" alt="" class="owner-image">
-    <div class="object__owner">
-    ${object.owner.firstName} ${object.owner.lastName}
-    </div>
+    ${printOwner(object.owner)}
+  </div>
+  `;
+}
+
+function printOwner(owner) {
+  return `
+  <div class="owner">
+    <img src="${owner.picture}" alt="" class="owner__image">
+    <a href="#" data-action="show-user" data-user-id="${owner.id}" class="owner__name">
+      ${owner.firstName} ${owner.lastName}
+    </a>
   </div>
   `;
 }

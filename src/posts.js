@@ -17,43 +17,47 @@ async function getPosts(page) {
       attributes += ` data-action="load-more" data-next-page="${page + 1}"`;
     }
 
-    document.querySelector(".posts").innerHTML += `
-    <div class="post" ${attributes}>
-      <div class="post__header">
-        <img src="${post.image}" alt="" class="post__image">
-        <div class="post__header__text">
-          <h2 class="post__title">${post.text}</h2>
-          ${printObjectMetadata(post)}
-          <div>
-            <button type="button" class="button button--like" 
-              data-action="like-post" data-post-id="${post.id}">
-              <span class="like-count">${post.likes}</span>
-              &uarr;Like
-            </button>
-            <button type="button" class="button button--expand"
-              data-action="show-comments" data-post-id="${post.id}">
-              <div class="line">
-                <div class="line__left"></div>
-                <div class="line__right"></div>
-              </div>
-              <div class="line">
-                <div class="line__left"></div>
-                <div class="line__right"></div>
-              </div>
-            </button>
-          </div>
-        </div>
-      </div>
-      <div class="post__comments hidden" data-post-id="${post.id}">
-      </div>
-      <div class="loading loading--comments hidden">
-        Loading<span class="dots"></span>
-      </div>
-    </div>
-    `;
+    document.querySelector(".posts").innerHTML += printPost(post, attributes);
   });
 
   stopLoading(".loading--posts");
+}
+
+function printPost(post, attributes) {
+  return `
+<div class="post" ${attributes}>
+  <div class="post__header">
+    <img src="${post.image}" alt="" class="post__image">
+    <div class="post__header__text">
+      <h2 class="post__title">${post.text}</h2>
+      ${printObjectMetadata(post)}
+      <div>
+        <button type="button" class="button button--like" 
+          data-action="like-post" data-post-id="${post.id}">
+          <span class="like-count">${post.likes}</span>
+          &uarr;Like
+        </button>
+        <button type="button" class="button button--expand"
+          data-action="show-comments" data-post-id="${post.id}">
+          <div class="line">
+            <div class="line__left"></div>
+            <div class="line__right"></div>
+          </div>
+          <div class="line">
+            <div class="line__left"></div>
+            <div class="line__right"></div>
+          </div>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="post__comments hidden" data-post-id="${post.id}">
+  </div>
+  <div class="loading loading--comments hidden">
+    Loading<span class="dots"></span>
+  </div>
+</div>
+  `;
 }
 
 let loadMoreTimer;

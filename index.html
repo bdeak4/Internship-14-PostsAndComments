@@ -31,12 +31,24 @@
         Loading<span class="dots"></span>
       </div>
     </div>
-    <div class="modal">
-      test<br />test<br />test<br />test<br />test<br />test<br />test<br />test<br />
+    <div id="user-modal" class="modal">
+      <img src="" alt="" class="user__image" />
+      <div>
+        <h2 class="user__name"></h2>
+        <p class="user__register-date"></p>
+        <p class="user__birthday"></p>
+        <p class="user__email"></p>
+        <p class="user__phone"></p>
+      </div>
+
       <button
-        onclick="document.querySelector('.modal').classList.toggle('modal--active')"
+        type="button"
+        data-action="close-modal"
+        data-modal-id="user-modal"
+        class="close-modal"
       >
-        zatvori me
+        <div class="line"></div>
+        <div class="line"></div>
       </button>
     </div>
 
