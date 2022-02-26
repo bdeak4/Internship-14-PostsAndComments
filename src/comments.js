@@ -30,6 +30,10 @@ async function getComments(postId) {
 
   const comments = await getApiResponse(`/post/${postId}/comment`);
 
+  comments.data.sort(
+    (a, b) => new Date(a.publishDate) - new Date(b.publishDate)
+  );
+
   comments.data.forEach((comment) => {
     commentsElement.innerHTML += `
     <div class="post__comment">
