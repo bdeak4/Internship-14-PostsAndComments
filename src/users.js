@@ -35,19 +35,19 @@ function updateUserModal(user) {
     : "Loading...";
 
   modal.querySelector(".user__register-date").innerHTML = user.registerDate
-    ? `Registracija: ${new Date(user.registerDate).toLocaleString()}`
+    ? `<b>Registracija:</b> ${new Date(user.registerDate).toLocaleString()}`
     : "";
 
   modal.querySelector(".user__birthday").innerHTML = user.dateOfBirth
-    ? `Rođendan: ${new Date(user.dateOfBirth).toLocaleString()}`
+    ? `<b>Rođendan:</b> ${new Date(user.dateOfBirth).toLocaleString()}`
     : "";
 
   modal.querySelector(".user__email").innerHTML = user.email
-    ? `Email: ${user.email}`
+    ? `<b>Email:</b> ${user.email}`
     : "";
 
   modal.querySelector(".user__phone").innerHTML = user.phone
-    ? `Telefon: ${user.phone}`
+    ? `<b>Telefon:</b> ${user.phone}`
     : "";
 }
 
