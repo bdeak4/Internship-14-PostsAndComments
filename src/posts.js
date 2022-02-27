@@ -8,6 +8,7 @@ import {
 
 async function getPosts(page, userId, tags) {
   startLoading(".loading--posts");
+  await setMessage(userId, tags);
 
   const posts = await getApiResponse(
     userId ? `/user/${userId}/post?page=${page}` : `/post?page=${page}`
@@ -85,6 +86,28 @@ function printPost(post, attributes) {
   </div>
 </div>
   `;
+}
+
+async function setMessage(userId, tags) {
+  let message = "";
+  if (userId && tags && tags.length > 0) {
+    message = `Postovi filtrirani po korisniku (${await printUser(userId)})
+               i tagovima (${printTags(tags)})`;
+  } else if (userId) {
+    message = `Postovi filtrirani po korisniku (${await printUser(userId)})`;
+  } else if (tags && tags.length > 0) {
+    message = `Postovi filtrirani po tagovima (${printTags(tags)})`;
+  }
+  document.querySelector(".message").innerHTML = message;
+}
+
+async function printUser(userId) {
+  const user = await getApiResponse(`/user/${userId}`);
+  return `<a href="#">${user.firstName} ${user.lastName}</a>`;
+}
+
+function printTags(tags) {
+  return tags.map((t) => `<a href="#">${t}</a>`).join(", ");
 }
 
 let loadMoreTimer;

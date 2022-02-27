@@ -71,6 +71,10 @@ a:hover {
   margin: 96px 0;
 }
 
+.message:empty {
+  margin: 0;
+}
+
 .post {
   color: #000;
   background-color: #fff;
