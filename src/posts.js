@@ -1,5 +1,6 @@
 import { collapseComments, getComments } from "./comments.js";
 import { startLoading, stopLoading } from "./loading.js";
+import { getFilteredByTags } from "./postFilters.js";
 import {
   getApiResponse,
   isElementVisible,
@@ -14,7 +15,9 @@ async function getPosts(page, userId, tags) {
     userId ? `/user/${userId}/post?page=${page}` : `/post?page=${page}`
   );
 
-  if (tags && tags.length > 0) {
+  const hasTags = tags && tags.length > 0;
+
+  if (hasTags) {
     posts.data = posts.data.filter((p) =>
       tags.every((t) => p.tags.includes(t))
     );
@@ -30,7 +33,7 @@ async function getPosts(page, userId, tags) {
         attributes.push(`data-user-id="${userId}"`);
       }
 
-      if (tags && tags.length > 0) {
+      if (hasTags) {
         attributes.push(`data-tags="${tags.join(",")}"`);
       }
     }
@@ -38,12 +41,11 @@ async function getPosts(page, userId, tags) {
     document.querySelector(".posts").innerHTML += printPost(post, attributes);
   });
 
-  if (posts.data.length === 0) {
-    const message = `<p>nema ${page > 0 ? "više " : ""} rezultata :/</p>`;
-    document.querySelector(".posts").innerHTML += message;
-  }
-
   stopLoading(".loading--posts");
+
+  if (isElementVisible('[data-action="load-more"]')) {
+    loadMore();
+  }
 }
 
 function printPost(post, attributes) {
@@ -56,7 +58,15 @@ function printPost(post, attributes) {
       ${printObjectMetadata(post)}
       <div class="post__tags">
         ${post.tags
-          .map((tag) => `<div class="post__tag">${tag}</div>`)
+          .map((tag) => {
+            const action = getFilteredByTags().includes(tag)
+              ? "remove-tag-filter"
+              : "add-tag-filter";
+
+            return `<div class="post__tag" data-action="${action}" data-tag="${tag}">
+                      ${tag}
+                    </div>`;
+          })
           .join("")}
       </div>
       <div class="post__button-container">
@@ -103,11 +113,17 @@ async function setMessage(userId, tags) {
 
 async function printUser(userId) {
   const user = await getApiResponse(`/user/${userId}`);
-  return `<a href="#">${user.firstName} ${user.lastName}</a>`;
+  return `<a data-action="reset-user-filter" data-user-id="${userId}"
+             href="#">${user.firstName} ${user.lastName}</a>`;
 }
 
 function printTags(tags) {
-  return tags.map((t) => `<a href="#">${t}</a>`).join(", ");
+  return tags
+    .map(
+      (tag) =>
+        `<a href="#" data-action="remove-tag-filter" data-tag="${tag}">${tag}</a>`
+    )
+    .join(", ");
 }
 
 let loadMoreTimer;
@@ -119,27 +135,31 @@ document.addEventListener("scroll", () => {
       return;
     }
 
-    const element = document.querySelector('[data-action="load-more"]');
-    const nextPage = parseInt(element.dataset.nextPage);
-
-    delete element.dataset.action;
-    delete element.dataset.nextPage;
-
-    let userId;
-    if (element.dataset.userId) {
-      userId = element.dataset.userId;
-      delete element.dataset.userId;
-    }
-
-    let tags;
-    if (element.dataset.tags) {
-      tags = element.dataset.tags.split(",");
-      delete element.dataset.tags;
-    }
-
-    getPosts(nextPage, userId, tags);
+    loadMore();
   }, 100);
 });
+
+function loadMore() {
+  const element = document.querySelector('[data-action="load-more"]');
+  const nextPage = parseInt(element.dataset.nextPage);
+
+  delete element.dataset.action;
+  delete element.dataset.nextPage;
+
+  let userId;
+  if (element.dataset.userId) {
+    userId = element.dataset.userId;
+    delete element.dataset.userId;
+  }
+
+  let tags;
+  if (element.dataset.tags) {
+    tags = element.dataset.tags.split(",");
+    delete element.dataset.tags;
+  }
+
+  getPosts(nextPage, userId, tags);
+}
 
 document.querySelector(".posts").addEventListener("click", function (e) {
   if (!e.target.dataset.action) {

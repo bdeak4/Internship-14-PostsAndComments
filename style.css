@@ -75,6 +75,10 @@ a:hover {
   margin: 0;
 }
 
+.message [data-action]:hover {
+  text-decoration: line-through;
+}
+
 .post {
   color: #000;
   background-color: #fff;
@@ -152,9 +156,16 @@ a:hover {
   transition: background-color 200ms ease-out;
 }
 
-.post__tag:hover,
-.post__tag--active {
+.post__tag:hover {
   background-color: orangered;
+}
+
+.post__tag[data-action="remove-tag-filter"] {
+  background-color: orangered;
+}
+
+.post__tag[data-action="remove-tag-filter"]:hover {
+  background-color: #000;
 }
 
 .post__tag:not(:last-child) {
