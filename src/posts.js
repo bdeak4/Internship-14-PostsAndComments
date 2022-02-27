@@ -6,27 +6,48 @@ import {
   printObjectMetadata,
 } from "./utility.js";
 
-async function getPosts(page) {
+async function getPosts(page, userId, tags) {
   startLoading(".loading--posts");
 
-  const posts = await getApiResponse(`/post?page=${page}`);
-  console.log(posts);
+  const posts = await getApiResponse(
+    userId ? `/user/${userId}/post?page=${page}` : `/post?page=${page}`
+  );
+
+  if (tags && tags.length > 0) {
+    posts.data = posts.data.filter((p) =>
+      tags.every((t) => p.tags.includes(t))
+    );
+  }
 
   posts.data.forEach((post, i) => {
-    let attributes = "";
+    let attributes = [];
     if (i + 1 === posts.data.length) {
-      attributes += ` data-action="load-more" data-next-page="${page + 1}"`;
+      attributes.push(`data-action="load-more"`);
+      attributes.push(`data-next-page="${page + 1}"`);
+
+      if (userId) {
+        attributes.push(`data-user-id="${userId}"`);
+      }
+
+      if (tags && tags.length > 0) {
+        attributes.push(`data-tags="${tags.join(",")}"`);
+      }
     }
 
     document.querySelector(".posts").innerHTML += printPost(post, attributes);
   });
+
+  if (posts.data.length === 0) {
+    const message = `<p>nema ${page > 0 ? "više " : ""} rezultata :/</p>`;
+    document.querySelector(".posts").innerHTML += message;
+  }
 
   stopLoading(".loading--posts");
 }
 
 function printPost(post, attributes) {
   return `
-<div class="post" ${attributes}>
+<div class="post" ${attributes.join(" ")}>
   <div class="post__header">
     <img src="${post.image}" alt="" class="post__image">
     <div class="post__header__text">
@@ -81,7 +102,19 @@ document.addEventListener("scroll", () => {
     delete element.dataset.action;
     delete element.dataset.nextPage;
 
-    getPosts(nextPage);
+    let userId;
+    if (element.dataset.userId) {
+      userId = element.dataset.userId;
+      delete element.dataset.userId;
+    }
+
+    let tags;
+    if (element.dataset.tags) {
+      tags = element.dataset.tags.split(",");
+      delete element.dataset.tags;
+    }
+
+    getPosts(nextPage, userId, tags);
   }, 100);
 });
 
