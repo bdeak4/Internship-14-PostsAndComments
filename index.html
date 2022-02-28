@@ -12,12 +12,22 @@
       <nav class="actions">
         <div>PostsAndComments</div>
         <div class="actions-public">
-          <a href="#">Početna</a>
-          <a href="#">Prijava</a>
-          <a href="#">Registracija</a>
+          <a
+            href="#"
+            data-action="open-simple-modal"
+            data-modal-id="login-modal"
+          >
+            Prijava
+          </a>
+          <a
+            href="#"
+            data-action="open-simple-modal"
+            data-modal-id="signup-modal"
+          >
+            Registracija
+          </a>
         </div>
         <div class="actions-private hidden">
-          <a href="#">Početna</a>
           <a href="#">Moji postovi</a>
           <a href="#">Odjavi se</a>
         </div>
@@ -42,6 +52,31 @@
         type="button"
         data-action="close-modal"
         data-modal-id="user-modal"
+        class="close-modal"
+      >
+        <div class="line"></div>
+        <div class="line"></div>
+      </button>
+    </div>
+    <div id="login-modal" class="modal">
+      <h2 class="modal__title">Login</h2>
+      <form class="login-form form">
+        <label>Ime</label>
+        <input type="text" name="firstName" />
+
+        <label>Prezime</label>
+        <input type="text" name="lastName" />
+
+        <label>Email</label>
+        <input type="text" name="email" />
+
+        <button type="submit" class="form__submit-button button">Login</button>
+      </form>
+
+      <button
+        type="button"
+        data-action="close-simple-modal"
+        data-modal-id="login-modal"
         class="close-modal"
       >
         <div class="line"></div>

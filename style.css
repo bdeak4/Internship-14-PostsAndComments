@@ -37,10 +37,6 @@ a:hover {
   padding: 0 16px;
 }
 
-.hidden {
-  display: none;
-}
-
 .button {
   padding: 8px 16px;
   border: none;
@@ -60,6 +56,15 @@ a:hover {
   top: 0;
   background-color: #000;
   z-index: 2;
+}
+
+.actions-public,
+.actions-private {
+  display: flex;
+}
+
+.actions a {
+  display: block;
 }
 
 .actions a:not(:last-child) {
@@ -301,5 +306,36 @@ a:hover {
 }
 
 .user__image[src=""] {
+  background-color: orangered;
+}
+
+.hidden {
+  display: none;
+}
+
+.modal__title {
+  margin-top: 0;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form label {
+  margin-bottom: 4px;
+}
+
+.form input {
+  margin-bottom: 16px;
+}
+
+.form__submit-button {
+  margin-top: 24px;
+  background-color: #fff;
+  color: #000;
+}
+
+.form__submit-button:hover {
   background-color: orangered;
 }

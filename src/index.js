@@ -1,5 +1,6 @@
 import { getPosts } from "./posts.js";
 import "./users.js";
+import "./auth.js";
 
 // document.getElementById("links-public").classList.add("hidden");
 // document.getElementById("links-private").classList.remove("hidden");

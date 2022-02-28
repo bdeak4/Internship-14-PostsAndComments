@@ -80,7 +80,7 @@ async function cleanAndGetPosts(userId, tags) {
   document.querySelector(".posts").innerHTML = "";
 
   for (let p = 0; p <= currentPage; p++) {
-    if (getNumberOfPosts() === 0) {
+    if (getNumberOfPosts() < 20) {
       await getPosts(p, userId, tags);
     }
   }
