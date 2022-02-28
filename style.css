@@ -185,8 +185,12 @@ a:hover {
   margin-right: 16px;
 }
 
-.button--like:hover {
+.button--like:not(:disabled):hover {
   background-color: orangered;
+}
+
+.button--like:disabled {
+  cursor: not-allowed;
 }
 
 .like-count {

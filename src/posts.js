@@ -1,3 +1,4 @@
+import { getCurrentUser } from "./auth.js";
 import { collapseComments, getComments } from "./comments.js";
 import { startLoading, stopLoading } from "./loading.js";
 import { getFilteredByTags } from "./postFilters.js";
@@ -23,7 +24,7 @@ async function getPosts(page, userId, tags) {
     );
   }
 
-  posts.data.forEach((post, i) => {
+  posts.data.forEach(async (post, i) => {
     let attributes = [];
     if (i + 1 === posts.data.length) {
       attributes.push(`data-action="load-more"`);
@@ -38,7 +39,8 @@ async function getPosts(page, userId, tags) {
       }
     }
 
-    document.querySelector(".posts").innerHTML += printPost(post, attributes);
+    const postHTML = await printPost(post, attributes);
+    document.querySelector(".posts").innerHTML += postHTML;
   });
 
   stopLoading(".loading--posts");
@@ -48,7 +50,7 @@ async function getPosts(page, userId, tags) {
   }
 }
 
-function printPost(post, attributes) {
+async function printPost(post, attributes) {
   return `
 <div class="post" ${attributes.join(" ")}>
   <div class="post__header">
@@ -71,7 +73,8 @@ function printPost(post, attributes) {
       </div>
       <div class="post__button-container">
         <button type="button" class="button button--like"
-          data-action="like-post" data-post-id="${post.id}">
+          data-action="like-post" data-post-id="${post.id}"
+          ${(await getCurrentUser()) === null ? "disabled" : ""}>
           <span class="like-count">${post.likes}</span>
           &uarr;Like
         </button>
