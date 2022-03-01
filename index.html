@@ -60,15 +60,17 @@
     </div>
     <div id="login-modal" class="modal">
       <h2 class="modal__title">Login</h2>
-      <form class="login-form form">
-        <label>Ime</label>
-        <input type="text" name="firstName" />
+      <form class="form" id="login-form">
+        <label class="form__label">Ime</label>
+        <input type="text" name="firstName" class="form__input" />
 
-        <label>Prezime</label>
-        <input type="text" name="lastName" />
+        <label class="form__label">Prezime</label>
+        <input type="text" name="lastName" class="form__input" />
 
-        <label>Email</label>
-        <input type="text" name="email" />
+        <label class="form__label">Email</label>
+        <input type="text" name="email" class="form__input" />
+
+        <div class="form__error"></div>
 
         <button type="submit" class="form__submit-button button">Login</button>
       </form>

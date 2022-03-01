@@ -18,18 +18,35 @@ document.addEventListener("click", function (e) {
   switch (e.target.dataset.action) {
     case "open-simple-modal":
       e.preventDefault();
-      document
-        .getElementById(e.target.dataset.modalId)
-        .classList.add("modal--active");
+      openModal(e.target.dataset.modalId);
       break;
 
     case "close-simple-modal":
       e.preventDefault();
-      document
-        .getElementById(e.target.dataset.modalId)
-        .classList.remove("modal--active");
+      closeModal(e.target.dataset.modalId);
       break;
   }
+});
+
+function openModal(modalId) {
+  const modal = document.getElementById(modalId);
+
+  modal.classList.add("modal--active");
+
+  const formError = modal.querySelector(".form__error");
+  if (formError) {
+    formError.innerHTML = "";
+  }
+}
+
+function closeModal(modalId) {
+  document.getElementById(modalId).classList.remove("modal--active");
+}
+
+document.getElementById("login-form").addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  this.querySelector(".form__error").innerHTML = "neki err";
 });
 
 export { getCurrentUser };

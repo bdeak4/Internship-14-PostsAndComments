@@ -12,6 +12,10 @@ html {
   box-sizing: border-box;
 }
 
+*::selection {
+  background-color: orangered;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -326,12 +330,22 @@ a:hover {
   flex-direction: column;
 }
 
-.form label {
+.form__label {
   margin-bottom: 4px;
 }
 
-.form input {
+.form__input {
   margin-bottom: 16px;
+  padding: 8px 12px;
+  border: none;
+  background-color: #fff;
+  color: #000;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.form__input:focus {
+  outline: 3px solid orangered;
 }
 
 .form__submit-button {
@@ -342,4 +356,8 @@ a:hover {
 
 .form__submit-button:hover {
   background-color: orangered;
+}
+
+.form__error {
+  color: red;
 }
