@@ -88,10 +88,14 @@ async function cleanAndGetPosts(userId, tags) {
   }
 }
 
+function reloadPosts() {
+  cleanAndGetPosts(getFilteredByUserId(), getFilteredByTags());
+}
+
 export {
   getFilteredByTags,
   getFilteredByUserId,
   getCurrentPage,
   getNumberOfPosts,
-  cleanAndGetPosts,
+  reloadPosts,
 };

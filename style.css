@@ -260,7 +260,7 @@ a:hover {
   position: fixed;
   top: 50%;
   left: calc(50% - 16px);
-  transform: translate(-50%, -100vh) rotate(720deg);
+  transform: translate(-50%, -120vh) rotate(720deg);
   background-color: #000;
   max-width: 768px;
   width: calc(100% - 32px);

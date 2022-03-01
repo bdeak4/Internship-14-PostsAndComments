@@ -15,13 +15,14 @@ function isElementVisible(selector) {
   return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
 }
 
-async function getApiResponse(path, method, headers) {
+async function getApiResponse(path, method, headers, body) {
   const response = await fetch(`https://dummyapi.io/data/v1${path}`, {
     method: method || "GET",
     headers: {
       "app-id": appId,
       ...headers,
     },
+    body: body ? JSON.stringify(body) : null,
   });
   const json = await response.json();
   return json;

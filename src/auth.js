@@ -1,9 +1,5 @@
 import { showPrivateNavigation, showPublicNavigation } from "./navigation.js";
-import {
-  cleanAndGetPosts,
-  getFilteredByTags,
-  getFilteredByUserId,
-} from "./postFilters.js";
+import { reloadPosts } from "./postFilters.js";
 import { getApiResponse } from "./utility.js";
 
 async function getCurrentUser() {
@@ -20,6 +16,8 @@ function setCurrentUser(userId) {
   localStorage.setItem("currentUserId", userId);
 
   showPrivateNavigation();
+
+  reloadPosts();
 }
 
 function logoutCurrentUser() {
@@ -27,7 +25,7 @@ function logoutCurrentUser() {
 
   showPublicNavigation();
 
-  cleanAndGetPosts(getFilteredByUserId(), getFilteredByTags());
+  reloadPosts();
 }
 
 document.addEventListener("click", function (e) {
@@ -104,6 +102,49 @@ document
     email.value = "";
   });
 
+document
+  .getElementById("signup-form")
+  .addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const firstName = this.querySelector("[name=firstName]");
+    const lastName = this.querySelector("[name=lastName]");
+    const email = this.querySelector("[name=email]");
+    const phone = this.querySelector("[name=phone]");
+    const picture = this.querySelector("[name=picture]");
+
+    const submitButton = this.querySelector(".form__submit-button");
+    submitButton.innerHTML = "Loading. Please wait";
+    submitButton.disabled = true;
+
+    const { success, errors, userId } = await createUser(
+      firstName.value,
+      lastName.value,
+      email.value,
+      phone.value,
+      picture.value
+    );
+
+    submitButton.innerHTML = "Registracija";
+    submitButton.disabled = false;
+
+    if (!success) {
+      const errorList =
+        "<ul><li>" + Object.values(errors).join("</li><li>") + "</li></ul>";
+      this.querySelector(".form__error").innerHTML = errorList;
+      return;
+    }
+
+    setCurrentUser(userId);
+
+    closeModal("signup-modal");
+    firstName.value = "";
+    lastName.value = "";
+    email.value = "";
+    phone.value = "";
+    picture.value = "";
+  });
+
 async function userExists(firstName, lastName, email, page = 0) {
   const users = await getApiResponse(`/user?page=${page}&limit=50`);
   if (users.data.length === 0) {
@@ -126,6 +167,35 @@ async function userExists(firstName, lastName, email, page = 0) {
     return {
       success: false,
       error: `email "${email}" nije točan`,
+    };
+  }
+
+  return {
+    success: true,
+    userId: user.id,
+  };
+}
+
+async function createUser(firstName, lastName, email, phone, picture) {
+  const user = await getApiResponse(
+    "/user/create",
+    "POST",
+    {
+      "Content-Type": "application/json",
+    },
+    {
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      phone: phone,
+      picture: picture,
+    }
+  );
+
+  if (user.error === "BODY_NOT_VALID") {
+    return {
+      success: false,
+      errors: user.data,
     };
   }
 
