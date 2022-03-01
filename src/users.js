@@ -49,6 +49,8 @@ function updateUserModal(user) {
   modal.querySelector(".user__phone").innerHTML = user.phone
     ? `<b>Telefon:</b> ${user.phone}`
     : "";
+
+  modal.querySelector("[data-user-id]").dataset.userId = user.id ? user.id : "";
 }
 
 document

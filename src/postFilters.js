@@ -39,6 +39,8 @@ function removeTagFilter(e) {
 function setUserIdFilter(e) {
   e.preventDefault();
 
+  document.getElementById("user-modal").classList.remove("modal--active");
+
   cleanAndGetPosts(e.target.dataset.userId, getFilteredByTags());
 }
 
