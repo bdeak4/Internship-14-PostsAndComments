@@ -1,4 +1,9 @@
-import { showPrivateNavigation } from "./navigation.js";
+import { showPrivateNavigation, showPublicNavigation } from "./navigation.js";
+import {
+  cleanAndGetPosts,
+  getFilteredByTags,
+  getFilteredByUserId,
+} from "./postFilters.js";
 import { getApiResponse } from "./utility.js";
 
 async function getCurrentUser() {
@@ -17,6 +22,14 @@ function setCurrentUser(userId) {
   showPrivateNavigation();
 }
 
+function logoutCurrentUser() {
+  localStorage.removeItem("currentUserId");
+
+  showPublicNavigation();
+
+  cleanAndGetPosts(getFilteredByUserId(), getFilteredByTags());
+}
+
 document.addEventListener("click", function (e) {
   if (!e.target.dataset.action && e.target.parentElement) {
     e.target.parentElement.click();
@@ -32,6 +45,11 @@ document.addEventListener("click", function (e) {
     case "close-simple-modal":
       e.preventDefault();
       closeModal(e.target.dataset.modalId);
+      break;
+
+    case "logout":
+      e.preventDefault();
+      logoutCurrentUser();
       break;
   }
 });

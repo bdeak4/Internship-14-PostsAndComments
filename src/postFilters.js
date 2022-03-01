@@ -93,4 +93,5 @@ export {
   getFilteredByUserId,
   getCurrentPage,
   getNumberOfPosts,
+  cleanAndGetPosts,
 };
