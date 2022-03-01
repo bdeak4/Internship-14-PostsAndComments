@@ -8,7 +8,7 @@ import {
   printObjectMetadata,
 } from "./utility.js";
 
-async function getPosts(page, userId, tags) {
+async function getPosts(page = 0, userId, tags) {
   startLoading(".loading--posts");
   await setMessage(userId, tags);
 
@@ -23,6 +23,8 @@ async function getPosts(page, userId, tags) {
       tags.every((t) => p.tags.includes(t))
     );
   }
+
+  const currentUser = await getCurrentUser();
 
   posts.data.forEach(async (post, i) => {
     let attributes = [];
@@ -39,7 +41,7 @@ async function getPosts(page, userId, tags) {
       }
     }
 
-    const postHTML = await printPost(post, attributes);
+    const postHTML = printPost(post, attributes, currentUser);
     document.querySelector(".posts").innerHTML += postHTML;
   });
 
@@ -50,7 +52,7 @@ async function getPosts(page, userId, tags) {
   }
 }
 
-async function printPost(post, attributes) {
+function printPost(post, attributes, currentUser) {
   return `
 <div class="post" ${attributes.join(" ")}>
   <div class="post__header">
@@ -74,7 +76,7 @@ async function printPost(post, attributes) {
       <div class="post__button-container">
         <button type="button" class="button button--like"
           data-action="like-post" data-post-id="${post.id}"
-          ${(await getCurrentUser()) === null ? "disabled" : ""}>
+          ${currentUser === null ? "disabled" : ""}>
           <span class="like-count">${post.likes}</span>
           &uarr;Like
         </button>
@@ -165,7 +167,7 @@ function loadMore() {
 }
 
 document.querySelector(".posts").addEventListener("click", function (e) {
-  if (!e.target.dataset.action) {
+  if (!e.target.dataset.action && e.target.parentElement) {
     e.target.parentElement.click();
     return;
   }

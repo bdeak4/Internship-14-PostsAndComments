@@ -49,4 +49,4 @@ function printOwner(owner) {
   `;
 }
 
-export { isElementVisible, getApiResponse, printObjectMetadata };
+export { isElementVisible, getApiResponse, printObjectMetadata, printOwner };

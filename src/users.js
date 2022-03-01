@@ -1,6 +1,6 @@
 import { getApiResponse } from "./utility.js";
 
-document.querySelector(".posts").addEventListener("click", function (e) {
+document.addEventListener("click", function (e) {
   switch (e.target.dataset.action) {
     case "show-user":
       e.preventDefault();

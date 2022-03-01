@@ -65,13 +65,15 @@ a:hover {
 .actions-public,
 .actions-private {
   display: flex;
+  align-items: center;
 }
 
 .actions a {
   display: block;
 }
 
-.actions a:not(:last-child) {
+.actions a:not(:last-child),
+.actions-private__user {
   margin-right: 14px;
 }
 
@@ -193,7 +195,7 @@ a:hover {
   background-color: orangered;
 }
 
-.button--like:disabled {
+.button:disabled {
   cursor: not-allowed;
 }
 

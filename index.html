@@ -28,7 +28,7 @@
           </a>
         </div>
         <div class="actions-private hidden">
-          <a href="#">Moji postovi</a>
+          <div class="actions-private__user"></div>
           <a href="#">Odjavi se</a>
         </div>
       </nav>
@@ -62,13 +62,13 @@
       <h2 class="modal__title">Login</h2>
       <form class="form" id="login-form">
         <label class="form__label">Ime</label>
-        <input type="text" name="firstName" class="form__input" />
+        <input type="text" name="firstName" class="form__input" required />
 
         <label class="form__label">Prezime</label>
-        <input type="text" name="lastName" class="form__input" />
+        <input type="text" name="lastName" class="form__input" required />
 
         <label class="form__label">Email</label>
-        <input type="text" name="email" class="form__input" />
+        <input type="text" name="email" class="form__input" required />
 
         <div class="form__error"></div>
 
