@@ -30,6 +30,10 @@ async function getComments(postId) {
 
   const comments = await getApiResponse(`/post/${postId}/comment`);
 
+  if (commentsElement.innerHTML !== "") {
+    return;
+  }
+
   comments.data.sort(
     (a, b) => new Date(a.publishDate) - new Date(b.publishDate)
   );
@@ -46,7 +50,18 @@ async function getComments(postId) {
   });
 
   if (comments.total === 0) {
-    commentsElement.innerHTML = "nema komentara :/";
+    commentsElement.innerHTML = "<p>nema komentara :/</p>";
+  }
+
+  if (commentsElement.dataset.userId !== "") {
+    commentsElement.innerHTML += `
+    <form class="post__comment-form" data-post-id="${postId}"
+      data-user-id="${commentsElement.dataset.userId}">
+      <input type="text" name="message" placeholder="Write comment"
+        class="form__input" minlength="2" maxlength="500" required />
+      <button type="submit" class="button">Submit</button>
+    </form>
+    `;
   }
 
   stopLoading(`${commentsSelector} ~ .loading--comments`);
@@ -65,5 +80,32 @@ function collapseComments(postId) {
 
   stopLoading(`${commentsSelector} ~ .loading--comments`);
 }
+
+document.addEventListener("submit", async function (e) {
+  if (!e.target.classList.contains("post__comment-form")) {
+    return;
+  }
+
+  e.preventDefault();
+  const postId = e.target.dataset.postId;
+  const userId = e.target.dataset.userId;
+  const message = e.target.querySelector("[name=message]").value;
+
+  await getApiResponse(
+    "/comment/create",
+    "POST",
+    {
+      "Content-Type": "application/json",
+    },
+    {
+      message: message,
+      owner: userId,
+      post: postId,
+    }
+  );
+
+  collapseComments(postId);
+  await getComments(postId);
+});
 
 export { getComments, collapseComments };

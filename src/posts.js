@@ -110,7 +110,8 @@ function printPost(post, attributes, currentUser) {
       </div>
     </div>
   </div>
-  <div class="post__comments hidden" data-post-id="${post.id}">
+  <div class="post__comments hidden" data-post-id="${post.id}"
+    data-user-id=${currentUser !== null ? currentUser.id : ""}>
   </div>
   <div class="loading loading--comments hidden">
     Loading<span class="dots"></span>

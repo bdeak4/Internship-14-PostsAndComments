@@ -265,6 +265,17 @@ a:hover {
   margin-bottom: 24px;
 }
 
+.post__comment-form {
+  display: flex;
+}
+
+.post__comment-form input {
+  border: 1px solid #eee;
+  width: 100%;
+  margin-bottom: 0;
+  margin-right: 16px;
+}
+
 .modal {
   position: fixed;
   top: 50%;
