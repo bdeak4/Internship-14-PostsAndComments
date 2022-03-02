@@ -265,6 +265,10 @@ a:hover {
   margin-bottom: 24px;
 }
 
+.post__comment__body {
+  margin-bottom: 8px;
+}
+
 .post__comment-form {
   display: flex;
 }

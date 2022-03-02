@@ -1,5 +1,5 @@
 import { getCurrentUser } from "./auth.js";
-import { collapseComments, getComments } from "./comments.js";
+import { collapseComments, deleteComment, getComments } from "./comments.js";
 import { countLocalLikes, isPostLiked, likePost, unlikePost } from "./likes.js";
 import { startLoading, stopLoading } from "./loading.js";
 import { getFilteredByTags } from "./postFilters.js";
@@ -213,6 +213,11 @@ document.querySelector(".posts").addEventListener("click", function (e) {
 
     case "delete-post":
       deletePost(e.target.dataset.postId);
+      break;
+
+    case "delete-comment":
+      e.preventDefault();
+      deleteComment(e.target.dataset.commentId);
       break;
   }
 });

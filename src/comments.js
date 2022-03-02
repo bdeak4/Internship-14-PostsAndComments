@@ -39,12 +39,28 @@ async function getComments(postId) {
   );
 
   comments.data.forEach((comment) => {
+    const canModify =
+      commentsElement.dataset.userId !== "" &&
+      commentsElement.dataset.userId === comment.owner.id;
+
     commentsElement.innerHTML += `
-    <div class="post__comment">
+    <div class="post__comment" data-comment-id="${comment.id}">
       ${printObjectMetadata(comment)}
-      <div>
+      <div class="post__comment__body">
         ${comment.message}
       </div>
+      ${
+        canModify
+          ? `
+            <div>
+              <a href="#" data-action="edit-comment"
+                data-comment-id="${comment.id}">Edit</a>
+
+              <a href="#" data-action="delete-comment"
+                data-comment-id="${comment.id}">Delete</a>
+            </div>`
+          : ""
+      }
     </div>
     `;
   });
@@ -108,4 +124,11 @@ document.addEventListener("submit", async function (e) {
   await getComments(postId);
 });
 
-export { getComments, collapseComments };
+async function deleteComment(commentId) {
+  await getApiResponse(`/comment/${commentId}`, "DELETE");
+  document
+    .querySelector(`.post__comment[data-comment-id="${commentId}"]`)
+    .remove();
+}
+
+export { getComments, collapseComments, deleteComment };
