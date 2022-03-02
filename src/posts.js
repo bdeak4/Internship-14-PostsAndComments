@@ -1,6 +1,6 @@
 import { getCurrentUser } from "./auth.js";
 import { collapseComments, getComments } from "./comments.js";
-import { isPostLiked, likePost, unlikePost } from "./likes.js";
+import { countLocalLikes, isPostLiked, likePost, unlikePost } from "./likes.js";
 import { startLoading, stopLoading } from "./loading.js";
 import { getFilteredByTags } from "./postFilters.js";
 import {
@@ -27,7 +27,7 @@ async function getPosts(page = 0, userId, tags) {
 
   const currentUser = await getCurrentUser();
 
-  posts.data.forEach(async (post, i) => {
+  posts.data.forEach((post, i) => {
     let attributes = [];
     if (i + 1 === posts.data.length) {
       attributes.push(`data-action="load-more"`);
@@ -57,7 +57,7 @@ function printPost(post, attributes, currentUser) {
   const isPostedByCurrentUser =
     currentUser !== null && post.owner.id === currentUser.id;
   const canLike = currentUser !== null && !isPostedByCurrentUser;
-  const isLiked = isPostLiked(post.id);
+  const isLiked = canLike ? isPostLiked(currentUser.id, post.id) : false;
 
   return `
 <div class="post" data-post-id="${post.id}" ${attributes.join(" ")}>
@@ -84,7 +84,7 @@ function printPost(post, attributes, currentUser) {
           data-action="${!isLiked ? "like-post" : "unlike-post"}"
           data-post-id="${post.id}" ${!canLike ? "disabled" : ""}>
           <span class="like-count">
-            ${isLiked ? post.likes + 1 : post.likes}
+            ${post.likes + countLocalLikes(post.id)}
           </span>
           ${isLiked ? "&darr;Unlike" : "&uarr;Like"}
         </button>

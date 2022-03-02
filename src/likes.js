@@ -1,33 +1,48 @@
-function getLikedPosts() {
-  return JSON.parse(localStorage.getItem("likedPosts") || "[]");
+import { getCurrentUser } from "./auth.js";
+
+function getLikedPosts(currentUserId) {
+  const likedPosts = JSON.parse(localStorage.getItem("likedPosts") || "{}");
+
+  if (currentUserId in likedPosts) {
+    return likedPosts[currentUserId];
+  }
+  return [];
 }
 
-function setLikedPosts(posts) {
-  localStorage.setItem("likedPosts", JSON.stringify(posts));
+function setLikedPosts(currentUserId, posts) {
+  const likedPosts = JSON.parse(localStorage.getItem("likedPosts") || "{}");
+  const newLikedPosts = {
+    ...likedPosts,
+    [currentUserId]: posts,
+  };
+
+  localStorage.setItem("likedPosts", JSON.stringify(newLikedPosts));
 }
 
-function likePost(postId) {
-  const likedPosts = getLikedPosts();
+async function likePost(postId) {
+  const user = await getCurrentUser();
+  const likedPosts = getLikedPosts(user.id);
   likedPosts.push(postId);
-  setLikedPosts([...new Set(likedPosts)]);
+
+  setLikedPosts(user.id, [...new Set(likedPosts)]);
 
   handleLikeButton(postId, "like");
 }
 
-function unlikePost(postId) {
-  let likedPosts = getLikedPosts();
+async function unlikePost(postId) {
+  const user = await getCurrentUser();
+  let likedPosts = getLikedPosts(user.id);
   likedPosts = likedPosts.filter((id) => id !== postId);
-  setLikedPosts(likedPosts);
+
+  setLikedPosts(user.id, likedPosts);
 
   handleLikeButton(postId, "unlike");
 }
 
-function isPostLiked(postId) {
-  const likedPosts = getLikedPosts();
+function isPostLiked(currentUserId, postId) {
+  const likedPosts = getLikedPosts(currentUserId);
   return likedPosts.includes(postId);
 }
-
-const capitalize = (s) => (s && s[0].toUpperCase() + s.slice(1)) || "";
 
 function handleLikeButton(postId, action) {
   const isLike = action === "like";
@@ -35,6 +50,11 @@ function handleLikeButton(postId, action) {
 
   const likeButtonSelector = `[data-action="${action}-post"][data-post-id="${postId}"]`;
   const likeButtonElement = document.querySelector(likeButtonSelector);
+
+  if (likeButtonElement === null) {
+    return;
+  }
+
   likeButtonElement.dataset.action = `${antiAction}-post`;
 
   const likeText = "↑Like";
@@ -49,4 +69,10 @@ function handleLikeButton(postId, action) {
   likeCount.innerHTML = parseInt(likeCount.innerHTML) + (isLike ? 1 : -1);
 }
 
-export { likePost, unlikePost, isPostLiked };
+function countLocalLikes(postId) {
+  const likedPosts = JSON.parse(localStorage.getItem("likedPosts") || "{}");
+  const likedIds = Object.values(likedPosts).flat();
+  return likedIds.filter((id) => id === postId).length;
+}
+
+export { likePost, unlikePost, isPostLiked, countLocalLikes };
