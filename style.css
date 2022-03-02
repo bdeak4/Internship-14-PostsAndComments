@@ -280,6 +280,10 @@ a:hover {
   margin-right: 16px;
 }
 
+.post__comment-form[data-action="edit-comment"] {
+  margin-top: 8px;
+}
+
 .modal {
   position: fixed;
   top: 50%;

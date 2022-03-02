@@ -1,5 +1,10 @@
 import { getCurrentUser } from "./auth.js";
-import { collapseComments, deleteComment, getComments } from "./comments.js";
+import {
+  collapseComments,
+  deleteComment,
+  showEditCommentForm,
+  getComments,
+} from "./comments.js";
 import { countLocalLikes, isPostLiked, likePost, unlikePost } from "./likes.js";
 import { startLoading, stopLoading } from "./loading.js";
 import { getFilteredByTags, reloadPosts } from "./postFilters.js";
@@ -218,6 +223,12 @@ document.querySelector(".posts").addEventListener("click", function (e) {
     case "delete-comment":
       e.preventDefault();
       deleteComment(e.target.dataset.commentId);
+      break;
+
+    case "show-edit-comment-form":
+      e.preventDefault();
+      const { commentText, commentId, postId, userId } = e.target.dataset;
+      showEditCommentForm(commentText, commentId, postId, userId);
       break;
   }
 });

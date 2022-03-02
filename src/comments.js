@@ -53,8 +53,11 @@ async function getComments(postId) {
         canModify
           ? `
             <div>
-              <a href="#" data-action="edit-comment"
-                data-comment-id="${comment.id}">Edit</a>
+              <a href="#" data-action="show-edit-comment-form"
+                data-comment-id="${comment.id}"
+                data-post-id="${postId}"
+                data-user-id="${comment.owner.id}"
+                data-comment-text="${comment.message}">Edit</a>
 
               <a href="#" data-action="delete-comment"
                 data-comment-id="${comment.id}">Delete</a>
@@ -71,8 +74,8 @@ async function getComments(postId) {
 
   if (commentsElement.dataset.userId !== "") {
     commentsElement.innerHTML += `
-    <form class="post__comment-form" data-post-id="${postId}"
-      data-user-id="${commentsElement.dataset.userId}">
+    <form class="post__comment-form" data-action="create-comment"
+      data-post-id="${postId}" data-user-id="${commentsElement.dataset.userId}">
       <input type="text" name="message" placeholder="Write comment"
         class="form__input" minlength="2" maxlength="500" required />
       <button type="submit" class="button">Submit</button>
@@ -105,7 +108,12 @@ document.addEventListener("submit", async function (e) {
   e.preventDefault();
   const postId = e.target.dataset.postId;
   const userId = e.target.dataset.userId;
+  const commentId = e.target.dataset.commentId;
   const message = e.target.querySelector("[name=message]").value;
+
+  if (commentId) {
+    await getApiResponse(`/comment/${commentId}`, "DELETE");
+  }
 
   await getApiResponse(
     "/comment/create",
@@ -131,4 +139,26 @@ async function deleteComment(commentId) {
     .remove();
 }
 
-export { getComments, collapseComments, deleteComment };
+function showEditCommentForm(commentText, commentId, postId, userId) {
+  const formSelector = `.post__comment-form[data-comment-id="${commentId}"]`;
+  const formElement = document.querySelector(formSelector);
+  if (formElement) {
+    return;
+  }
+
+  const commentSelector = `.post__comment[data-comment-id="${commentId}"`;
+  const commentElement = document.querySelector(commentSelector);
+  commentElement.insertAdjacentHTML(
+    "beforeend",
+    `
+    <form class="post__comment-form" data-action="edit-comment"
+      data-post-id="${postId}" data-user-id="${userId}" data-comment-id="${commentId}">
+      <input type="text" name="message" placeholder="Write comment"
+        class="form__input" minlength="2" maxlength="500" required value="${commentText}" />
+      <button type="submit" class="button">Edit</button>
+    </form>
+    `
+  );
+}
+
+export { getComments, collapseComments, deleteComment, showEditCommentForm };
