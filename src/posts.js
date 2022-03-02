@@ -2,7 +2,7 @@ import { getCurrentUser } from "./auth.js";
 import { collapseComments, deleteComment, getComments } from "./comments.js";
 import { countLocalLikes, isPostLiked, likePost, unlikePost } from "./likes.js";
 import { startLoading, stopLoading } from "./loading.js";
-import { getFilteredByTags } from "./postFilters.js";
+import { getFilteredByTags, reloadPosts } from "./postFilters.js";
 import {
   getApiResponse,
   isElementVisible,
@@ -221,5 +221,75 @@ document.querySelector(".posts").addEventListener("click", function (e) {
       break;
   }
 });
+
+function closeModal(modalId) {
+  document.getElementById(modalId).classList.remove("modal--active");
+}
+
+document
+  .getElementById("post-form")
+  .addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const text = this.querySelector("[name=text]");
+    const tags = this.querySelector("[name=tags]");
+    const image = this.querySelector("[name=image]");
+
+    const submitButton = this.querySelector(".form__submit-button");
+    submitButton.innerHTML = "Loading. Please wait";
+    submitButton.disabled = true;
+
+    const { success, errors } = await createPost(
+      text.value,
+      tags.value.split(","),
+      image.value
+    );
+
+    submitButton.innerHTML = "Stvori post";
+    submitButton.disabled = false;
+
+    if (!success) {
+      const errorList =
+        "<ul><li>" + Object.values(errors).join("</li><li>") + "</li></ul>";
+      this.querySelector(".form__error").innerHTML = errorList;
+      return;
+    }
+
+    reloadPosts();
+
+    closeModal("post-modal");
+    text.value = "";
+    tags.value = "";
+    image.value = "";
+  });
+
+async function createPost(text, tags, image) {
+  const user = await getCurrentUser();
+  const post = await getApiResponse(
+    "/post/create",
+    "POST",
+    {
+      "Content-Type": "application/json",
+    },
+    {
+      text: text,
+      tags: tags,
+      image: image,
+      owner: user.id,
+    }
+  );
+
+  if (post.error === "BODY_NOT_VALID") {
+    return {
+      success: false,
+      errors: post.data,
+    };
+  }
+
+  return {
+    success: true,
+    postId: post.id,
+  };
+}
 
 export { getPosts };

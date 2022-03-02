@@ -28,6 +28,13 @@
           </a>
         </div>
         <div class="actions-private hidden">
+          <a
+            href="#"
+            data-action="open-simple-modal"
+            data-modal-id="post-modal"
+          >
+            Novi post
+          </a>
           <div class="actions-private__user"></div>
           <a href="#" data-action="logout">Odjavi se</a>
         </div>
@@ -120,6 +127,36 @@
         type="button"
         data-action="close-simple-modal"
         data-modal-id="signup-modal"
+        class="close-modal"
+      >
+        <div class="line"></div>
+        <div class="line"></div>
+      </button>
+    </div>
+
+    <div id="post-modal" class="modal">
+      <h2 class="modal__title">Novi post</h2>
+      <form class="form" id="post-form">
+        <label class="form__label">Text</label>
+        <input type="text" name="text" class="form__input" required />
+
+        <label class="form__label">Tags (odvojeni sa ",")</label>
+        <input type="text" name="tags" class="form__input" required />
+
+        <label class="form__label">Image</label>
+        <input type="text" name="image" class="form__input" required />
+
+        <div class="form__error"></div>
+
+        <button type="submit" class="form__submit-button button">
+          Stvori post
+        </button>
+      </form>
+
+      <button
+        type="button"
+        data-action="close-simple-modal"
+        data-modal-id="post-modal"
         class="close-modal"
       >
         <div class="line"></div>
