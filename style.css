@@ -55,6 +55,7 @@ a:hover {
 .actions {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 24px 0;
   position: sticky;
   top: 0;
@@ -193,6 +194,14 @@ a:hover {
 
 .button--like:not(:disabled):hover {
   background-color: orangered;
+}
+
+.button--like[data-action="unlike-post"] {
+  background-color: orangered;
+}
+
+.button--like[data-action="unlike-post"]:hover {
+  background-color: #000;
 }
 
 .button:disabled {

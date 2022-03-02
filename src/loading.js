@@ -3,6 +3,8 @@ const intervalIds = {};
 function startLoading(loadingSelector) {
   const loadingSelectorElement = document.querySelector(loadingSelector);
 
+  loadingSelectorElement.querySelector(".dots").innerHTML = "";
+
   loadingSelectorElement.classList.remove("hidden");
 
   intervalIds[loadingSelector] = setInterval(() => {

@@ -1,5 +1,6 @@
 import { getCurrentUser } from "./auth.js";
 import { collapseComments, getComments } from "./comments.js";
+import { isPostLiked, likePost, unlikePost } from "./likes.js";
 import { startLoading, stopLoading } from "./loading.js";
 import { getFilteredByTags } from "./postFilters.js";
 import {
@@ -53,6 +54,9 @@ async function getPosts(page = 0, userId, tags) {
 }
 
 function printPost(post, attributes, currentUser) {
+  const canLike = currentUser !== null && post.owner.id !== currentUser.id;
+  const isLiked = isPostLiked(post.id);
+
   return `
 <div class="post" ${attributes.join(" ")}>
   <div class="post__header">
@@ -75,10 +79,12 @@ function printPost(post, attributes, currentUser) {
       </div>
       <div class="post__button-container">
         <button type="button" class="button button--like"
-          data-action="like-post" data-post-id="${post.id}"
-          ${currentUser === null ? "disabled" : ""}>
-          <span class="like-count">${post.likes}</span>
-          &uarr;Like
+          data-action="${!isLiked ? "like-post" : "unlike-post"}"
+          data-post-id="${post.id}" ${!canLike ? "disabled" : ""}>
+          <span class="like-count">
+            ${isLiked ? post.likes + 1 : post.likes}
+          </span>
+          ${isLiked ? "&darr;Unlike" : "&uarr;Like"}
         </button>
         <button type="button" class="button button--expand"
           data-action="show-comments" data-post-id="${post.id}">
@@ -179,6 +185,14 @@ document.querySelector(".posts").addEventListener("click", function (e) {
 
     case "hide-comments":
       collapseComments(e.target.dataset.postId);
+      break;
+
+    case "like-post":
+      likePost(e.target.dataset.postId);
+      break;
+
+    case "unlike-post":
+      unlikePost(e.target.dataset.postId);
       break;
   }
 });
