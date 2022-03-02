@@ -54,11 +54,13 @@ async function getPosts(page = 0, userId, tags) {
 }
 
 function printPost(post, attributes, currentUser) {
-  const canLike = currentUser !== null && post.owner.id !== currentUser.id;
+  const isPostedByCurrentUser =
+    currentUser !== null && post.owner.id === currentUser.id;
+  const canLike = currentUser !== null && !isPostedByCurrentUser;
   const isLiked = isPostLiked(post.id);
 
   return `
-<div class="post" ${attributes.join(" ")}>
+<div class="post" data-post-id="${post.id}" ${attributes.join(" ")}>
   <div class="post__header">
     <img src="${post.image}" alt="" class="post__image">
     <div class="post__header__text">
@@ -97,6 +99,14 @@ function printPost(post, attributes, currentUser) {
             <div class="line__right"></div>
           </div>
         </button>
+        ${
+          isPostedByCurrentUser
+            ? `<button type="button" class="button"
+                data-action="delete-post" data-post-id="${post.id}">
+                Delete
+              </button>`
+            : ""
+        }
       </div>
     </div>
   </div>
@@ -172,6 +182,11 @@ function loadMore() {
   getPosts(nextPage, userId, tags);
 }
 
+async function deletePost(postId) {
+  await getApiResponse(`/post/${postId}`, "DELETE");
+  document.querySelector(`.post[data-post-id="${postId}"]`).remove();
+}
+
 document.querySelector(".posts").addEventListener("click", function (e) {
   if (!e.target.dataset.action && e.target.parentElement) {
     e.target.parentElement.click();
@@ -193,6 +208,10 @@ document.querySelector(".posts").addEventListener("click", function (e) {
 
     case "unlike-post":
       unlikePost(e.target.dataset.postId);
+      break;
+
+    case "delete-post":
+      deletePost(e.target.dataset.postId);
       break;
   }
 });

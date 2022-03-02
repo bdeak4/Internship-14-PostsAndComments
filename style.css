@@ -188,11 +188,11 @@ a:hover {
   display: flex;
 }
 
-.button--like {
-  margin-right: 16px;
+.post__button-container .button:not(:last-child) {
+  margin-right: 14px;
 }
 
-.button--like:not(:disabled):hover {
+.button:not(:disabled):hover {
   background-color: orangered;
 }
 
